@@ -13,7 +13,7 @@ BIN_DIR = bin
 OBJ_DIR = obj
 SRC_DIR = src
 
-APP_PATH = $(BIN_DIR)/$(APP_NAME)
+APP_PATH = $(BIN_DIR)/$(PRO_NAME)
 LIB_PATH = $(OBJ_DIR)/$(SRC_DIR)/$(LIB_NAME)/$(LIB_NAME).a
 
 SRC_EXT = cpp
@@ -44,7 +44,7 @@ $(OBJ_DIR)/%.o: %.$(SRC_EXT)
 	
 .PHONY: clean
 clean:
-	$(RM) $(APP_PATH) $(TEST_PATH) $(LIB_PATH)
+	$(RM) $(APP_PATH) $(LIB_PATH)
 	find $(OBJ_DIR) -name '*.o' -exec $(RM) '{}' \;
 	find $(OBJ_DIR) -name '*.d' -exec $(RM) '{}' \;
 
