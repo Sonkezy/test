@@ -25,8 +25,8 @@ int main(int argc, char** argv)
     int numb_of_removed = 0;
     bool help = false;
     bool sha = false;
-    std::string sha_key;
-    int numb_of_sha_key = 0;
+    std::string sha_input;
+    int numb_of_sha_input = 0;
     bool print_columns = true;
     std::string options = "cnC";
 
@@ -72,11 +72,11 @@ int main(int argc, char** argv)
                     sha = true;
                     options_update(options, 'H', 1);
                     if (argc - i > 1 || (int)strlen(argv[i]) <= 2) {
-                        sha_key = argv[i + 1];
+                        sha_input = argv[i + 1];
                     } else {
                         error_input();
                     }
-                    numb_of_sha_key = i + 1;
+                    numb_of_sha_input = i + 1;
                     j += (int)strlen(argv[i]);
                     break;
                 case 'C':
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 
     for (int i = 1; i < argc; i++) {
         bool if_number = true;
-        if (i == numb_of_sha_key || i == numb_of_removed) {
+        if (i == numb_of_sha_input || i == numb_of_removed) {
             if (i < argc - 1) {
                 i++;
             } else {
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
         }
     }
     // std::cout << options << std::endl;
-    pw_rand(passwords, options, pw_number, pw_length, removed);
+    pw_rand(passwords, options, pw_number, pw_length, removed, sha_input);
     pw_output(passwords, options);
     if (capitalize && numerals && symbols && remove && help && sha
         && print_columns) {
