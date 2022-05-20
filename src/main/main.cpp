@@ -1,19 +1,22 @@
 #include <cstring>
-#include <iostream>
 #include <lib/pwgen.h>
 
 void help_message();
 void error_input();
 int parser_int(char* c);
+void options_update(std::string& options, char option, bool action);
 
-using namespace std;
+const int term_width = 80;
+const int term_length = 20;
 
 int main(int argc, char** argv)
 {
-    int pw_number = 160;    // Standart numbers of passwords
-    bool if_pw_num = false; // If number of passwords has input
+    std::vector<std::string> passwords;
     int pw_length = 8;      // Standart length of passwords
     bool if_pw_len = false; // If length of passwords has input
+    int pw_number = ((term_width - 1) / (pw_length + 1))
+            * term_length;  // Standart numbers of passwords
+    bool if_pw_num = false; // If number of passwords has input
     bool capitalize = true;
     bool numerals = true;
     bool symbols = false;
@@ -25,6 +28,7 @@ int main(int argc, char** argv)
     std::string sha_key;
     int numb_of_sha_key = 0;
     bool print_columns = true;
+    std::string options = "cnC";
 
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
@@ -32,21 +36,27 @@ int main(int argc, char** argv)
                 switch (argv[i][j]) {
                 case 'c':
                     capitalize = true;
+                    options_update(options, 'c', 1);
                     break;
                 case 'A':
                     capitalize = false;
+                    options_update(options, 'c', 0);
                     break;
                 case 'n':
                     numerals = true;
+                    options_update(options, 'n', 1);
                     break;
                 case '0':
                     numerals = false;
+                    options_update(options, 'n', 0);
                     break;
                 case 'y':
                     symbols = true;
+                    options_update(options, 'y', 1);
                     break;
                 case 'r':
                     remove = true;
+                    options_update(options, 'r', 1);
                     if (argc - i > 1 || (int)strlen(argv[i]) <= 2) {
                         removed = argv[i + 1];
                     } else {
@@ -60,6 +70,7 @@ int main(int argc, char** argv)
                     break;
                 case 'H':
                     sha = true;
+                    options_update(options, 'H', 1);
                     if (argc - i > 1 || (int)strlen(argv[i]) <= 2) {
                         sha_key = argv[i + 1];
                     } else {
@@ -70,10 +81,13 @@ int main(int argc, char** argv)
                     break;
                 case 'C':
                     print_columns = true;
-                    pw_number = 160;
+                    options_update(options, 'C', 1);
+                    pw_number = ((term_width - 1) / (pw_length + 1))
+                            * term_length;
                     break;
                 case '1':
                     print_columns = false;
+                    options_update(options, 'C', 0);
                     pw_number = 1;
                     break;
                 default:
@@ -116,7 +130,9 @@ int main(int argc, char** argv)
             if_pw_len = true;
         }
     }
-
+    // std::cout << options << std::endl;
+    pw_rand(passwords, options, pw_number, pw_length, removed);
+    pw_output(passwords, options);
     if (capitalize && numerals && symbols && remove && help && sha
         && print_columns) {
         printf("Dibil %d %d\n", pw_number, pw_length);
@@ -170,5 +186,29 @@ int parser_int(char* c)
         number += (n * pow);
     }
     return number;
+}
+
+void options_update(std::string& options, char option, bool action)
+{
+    if (action == 1) {
+        bool already = false;
+        for (int i = 0; i < (int)options.length(); i++) {
+            if (options[i] == option) {
+                already = true;
+                break;
+            }
+        }
+        if (!already) {
+            // printf("We add option %c \n",option);
+            options.push_back(option);
+        }
+    } else {
+        for (int i = 0; i < (int)options.length(); i++) {
+            if (options[i] == option) {
+                // printf("We erase option %c \n",option);
+                options.erase(i, 1);
+            }
+        }
+    }
 }
 
