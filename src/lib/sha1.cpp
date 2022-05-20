@@ -36,7 +36,7 @@ std::string sha_gen(std::string mess)
     messc[61] = (lmb >> 16) & 0xFF;
     messc[62] = (lmb >> 8) & 0xFF;
     messc[63] = (lmb)&0xFF;
-    
+
     unsigned* H;
     H = (unsigned*)malloc(5 * sizeof(unsigned));
     H[0] = 0x67452301;
@@ -50,7 +50,7 @@ std::string sha_gen(std::string mess)
     unsigned* W;
     unsigned A, B, C, D, E;
     W = (unsigned*)malloc(80 * sizeof(unsigned));
-    
+
     for (t = 0; t < 16; t++) {
         W[t] = ((unsigned)messc[t * 4]) << 24;
         ;
@@ -126,6 +126,6 @@ std::string sha_gen(std::string mess)
             s.push_back(c[i][j]);
         }
     }
-    s=parser_to_lower(s);
+    s = parser_to_lower(s);
     return s;
 }

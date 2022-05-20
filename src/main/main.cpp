@@ -17,17 +17,10 @@ int main(int argc, char** argv)
     int pw_number = ((term_width - 1) / (pw_length + 1))
             * term_length;  // Standart numbers of passwords
     bool if_pw_num = false; // If number of passwords has input
-    bool capitalize = true;
-    bool numerals = true;
-    bool symbols = false;
-    bool remove = false;
     std::string removed;
     int numb_of_removed = 0;
-    bool help = false;
-    bool sha = false;
     std::string sha_input;
     int numb_of_sha_input = 0;
-    bool print_columns = true;
     std::string options = "cnC";
 
     for (int i = 1; i < argc; i++) {
@@ -35,27 +28,21 @@ int main(int argc, char** argv)
             for (int j = 1; j < (int)strlen(argv[i]); j++) {
                 switch (argv[i][j]) {
                 case 'c':
-                    capitalize = true;
                     options_update(options, 'c', 1);
                     break;
                 case 'A':
-                    capitalize = false;
                     options_update(options, 'c', 0);
                     break;
                 case 'n':
-                    numerals = true;
                     options_update(options, 'n', 1);
                     break;
                 case '0':
-                    numerals = false;
                     options_update(options, 'n', 0);
                     break;
                 case 'y':
-                    symbols = true;
                     options_update(options, 'y', 1);
                     break;
                 case 'r':
-                    remove = true;
                     options_update(options, 'r', 1);
                     if (argc - i > 1 || (int)strlen(argv[i]) <= 2) {
                         removed = argv[i + 1];
@@ -69,7 +56,6 @@ int main(int argc, char** argv)
                     help = true;
                     break;
                 case 'H':
-                    sha = true;
                     options_update(options, 'H', 1);
                     if (argc - i > 1 || (int)strlen(argv[i]) <= 2) {
                         sha_input = argv[i + 1];
@@ -80,19 +66,16 @@ int main(int argc, char** argv)
                     j += (int)strlen(argv[i]);
                     break;
                 case 'C':
-                    print_columns = true;
                     options_update(options, 'C', 1);
                     pw_number = ((term_width - 1) / (pw_length + 1))
                             * term_length;
                     break;
                 case '1':
-                    print_columns = false;
                     options_update(options, 'C', 0);
                     pw_number = 1;
                     break;
                 default:
                     help = true;
-                    printf(" HEEELP\n");
                     break;
                 }
             }
@@ -133,10 +116,6 @@ int main(int argc, char** argv)
     // std::cout << options << std::endl;
     pw_rand(passwords, options, pw_number, pw_length, removed, sha_input);
     pw_output(passwords, options);
-    if (capitalize && numerals && symbols && remove && help && sha
-        && print_columns) {
-        printf("Dibil %d %d\n", pw_number, pw_length);
-    }
     return 0;
 }
 
