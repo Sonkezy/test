@@ -147,4 +147,3 @@ void error_input()
     printf("Invalid input\n");
     help_message();
 }
-

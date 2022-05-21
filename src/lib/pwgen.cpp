@@ -22,21 +22,21 @@ void pw_rand(
     for (int i = 0; i < 5; i++) {
         used += pw_lowers;
     }
-    if (find_option(options,'c')) {
+    if (find_option(options, 'c')) {
         used += pw_uppers;
     }
-    if (find_option(options,'n')) {
+    if (find_option(options, 'n')) {
         used += pw_digits;
     }
-    if (find_option(options,'y')) {
+    if (find_option(options, 'y')) {
         used += pw_symbols;
     }
-    if (find_option(options,'H')) {
+    if (find_option(options, 'H')) {
         std::string sha_key = sha_gen(sha_input);
         used = sha_key;
         sha = true;
     }
-    if (find_option(options,'r')) {
+    if (find_option(options, 'r')) {
         pw_rm(used, removed);
     }
     srand(time(NULL));
@@ -90,15 +90,15 @@ void pw_check_options(std::string& password, std::string options)
     int rand_value_1;
     int rand_value_2;
     bool success = true;
-    bool capitalize = find_option(options,'c');
-    bool numerals = find_option(options,'n');
-    bool symbols = find_option(options,'y');
-    if(capitalize){
-    	capitalize = false;
-    	for (int i = 0; i < (int)pw_uppers.length(); i++) {
-            bool found_uppers = find_option(password,pw_uppers[i]);
-            if(found_uppers){
-            	capitalize = true;
+    bool capitalize = find_option(options, 'c');
+    bool numerals = find_option(options, 'n');
+    bool symbols = find_option(options, 'y');
+    if (capitalize) {
+        capitalize = false;
+        for (int i = 0; i < (int)pw_uppers.length(); i++) {
+            bool found_uppers = find_option(password, pw_uppers[i]);
+            if (found_uppers) {
+                capitalize = true;
             }
         }
         if (!capitalize) {
@@ -111,9 +111,9 @@ void pw_check_options(std::string& password, std::string options)
     if (numerals) {
         numerals = false;
         for (int i = 0; i < (int)pw_digits.length(); i++) {
-            bool found_digits = find_option(password,pw_digits[i]);
-            if(found_digits){
-            	numerals = true;
+            bool found_digits = find_option(password, pw_digits[i]);
+            if (found_digits) {
+                numerals = true;
             }
         }
         if (!numerals) {
@@ -126,9 +126,9 @@ void pw_check_options(std::string& password, std::string options)
     if (symbols) {
         symbols = false;
         for (int i = 0; i < (int)pw_symbols.length(); i++) {
-            bool found_symbols = find_option(password,pw_symbols[i]);
-            if(found_symbols){
-            	symbols = true;
+            bool found_symbols = find_option(password, pw_symbols[i]);
+            if (found_symbols) {
+                symbols = true;
             }
         }
         if (!symbols) {
@@ -141,7 +141,6 @@ void pw_check_options(std::string& password, std::string options)
     if (!success) {
         pw_check_options(password, options);
     }
-    
 }
 
 int parser_int(char* c)
@@ -180,12 +179,12 @@ void options_update(std::string& options, char option, bool action)
     }
 }
 
-bool find_option(std::string options, char option){
-	std::size_t found = options.find(option);
-    	if (found != std::string::npos) {
-    		return true;
-    	}else{
-    		return false;
-    	}
+bool find_option(std::string options, char option)
+{
+    std::size_t found = options.find(option);
+    if (found != std::string::npos) {
+        return true;
+    } else {
+        return false;
+    }
 }
-
