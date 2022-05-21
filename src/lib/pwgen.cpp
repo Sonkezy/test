@@ -22,27 +22,21 @@ void pw_rand(
     for (int i = 0; i < 5; i++) {
         used += pw_lowers;
     }
-    std::size_t found;
-    found = options.find("c");
-    if (found != std::string::npos) {
+    if (find_option(options,'c')) {
         used += pw_uppers;
     }
-    found = options.find("n");
-    if (found != std::string::npos) {
+    if (find_option(options,'n')) {
         used += pw_digits;
     }
-    found = options.find("y");
-    if (found != std::string::npos) {
+    if (find_option(options,'y')) {
         used += pw_symbols;
     }
-    found = options.find("H");
-    if (found != std::string::npos) {
+    if (find_option(options,'H')) {
         std::string sha_key = sha_gen(sha_input);
         used = sha_key;
         sha = true;
     }
-    found = options.find("r");
-    if (found != std::string::npos) {
+    if (find_option(options,'r')) {
         pw_rm(used, removed);
     }
     srand(time(NULL));
@@ -96,17 +90,15 @@ void pw_check_options(std::string& password, std::string options)
     int rand_value_1;
     int rand_value_2;
     bool success = true;
-    std::size_t found;
-    bool capitalize = true;
-    bool numerals = true;
-    bool symbols = true;
-    found = options.find("c");
-    if (found != std::string::npos) {
-        capitalize = false;
-        for (int i = 0; i < (int)pw_uppers.length(); i++) {
-            found = password.find(pw_uppers[i]);
-            if (found != std::string::npos) {
-                capitalize = true;
+    bool capitalize = find_option(options,'c');
+    bool numerals = find_option(options,'n');
+    bool symbols = find_option(options,'y');
+    if(capitalize){
+    	capitalize = false;
+    	for (int i = 0; i < (int)pw_uppers.length(); i++) {
+            bool found_uppers = find_option(password,pw_uppers[i]);
+            if(found_uppers){
+            	capitalize = true;
             }
         }
         if (!capitalize) {
@@ -116,13 +108,12 @@ void pw_check_options(std::string& password, std::string options)
             password[rand_value_1] = pw_uppers[rand_value_2];
         }
     }
-    found = options.find("n");
-    if (found != std::string::npos) {
+    if (numerals) {
         numerals = false;
         for (int i = 0; i < (int)pw_digits.length(); i++) {
-            found = password.find(pw_digits[i]);
-            if (found != std::string::npos) {
-                numerals = true;
+            bool found_digits = find_option(password,pw_digits[i]);
+            if(found_digits){
+            	numerals = true;
             }
         }
         if (!numerals) {
@@ -132,13 +123,12 @@ void pw_check_options(std::string& password, std::string options)
             password[rand_value_1] = pw_digits[rand_value_2];
         }
     }
-    found = options.find("y");
-    if (found != std::string::npos) {
+    if (symbols) {
         symbols = false;
         for (int i = 0; i < (int)pw_symbols.length(); i++) {
-            found = password.find(pw_symbols[i]);
-            if (found != std::string::npos) {
-                symbols = true;
+            bool found_symbols = find_option(password,pw_symbols[i]);
+            if(found_symbols){
+            	symbols = true;
             }
         }
         if (!symbols) {
@@ -151,6 +141,7 @@ void pw_check_options(std::string& password, std::string options)
     if (!success) {
         pw_check_options(password, options);
     }
+    
 }
 
 int parser_int(char* c)
@@ -178,16 +169,23 @@ void options_update(std::string& options, char option, bool action)
             }
         }
         if (!already) {
-            // printf("We add option %c \n",option);
             options.push_back(option);
         }
     } else {
         for (int i = 0; i < (int)options.length(); i++) {
             if (options[i] == option) {
-                // printf("We erase option %c \n",option);
                 options.erase(i, 1);
             }
         }
     }
+}
+
+bool find_option(std::string options, char option){
+	std::size_t found = options.find(option);
+    	if (found != std::string::npos) {
+    		return true;
+    	}else{
+    		return false;
+    	}
 }
 

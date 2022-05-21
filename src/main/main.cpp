@@ -102,16 +102,13 @@ int main(int argc, char** argv)
         }
         if (if_number && if_pw_len && (!if_pw_num)) {
             pw_number = parser_int(argv[i]);
-            // printf("%d\n", pw_number);
             if_pw_num = true;
         }
         if (if_number && (!if_pw_len)) {
             pw_length = parser_int(argv[i]);
-            // printf("%d\n", pw_length);
             if_pw_len = true;
         }
     }
-    // std::cout << options << std::endl;
     pw_rand(passwords, options, pw_number, pw_length, removed, sha_input);
     pw_output(passwords, options);
     return 0;

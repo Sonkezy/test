@@ -17,3 +17,4 @@ void pw_rm(std::string& used, std::string removed);
 void pw_check_options(std::string& password, std::string options);
 int parser_int(char* c);
 void options_update(std::string& options, char option, bool action);
+bool find_option(std::string options, char option);
