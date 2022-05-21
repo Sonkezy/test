@@ -1,10 +1,7 @@
-#include <cstring>
 #include <lib/pwgen.h>
 
 void help_message();
 void error_input();
-int parser_int(char* c);
-void options_update(std::string& options, char option, bool action);
 
 const int term_width = 80;
 const int term_length = 20;
@@ -22,6 +19,7 @@ int main(int argc, char** argv)
     std::string sha_input;
     int numb_of_sha_input = 0;
     std::string options = "cnC";
+    bool help = false;
 
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
@@ -151,43 +149,5 @@ void error_input()
 {
     printf("Invalid input\n");
     help_message();
-}
-
-int parser_int(char* c)
-{
-    int number = 0;
-    for (int i = 0; i < ((int)strlen(c)); i++) {
-        int n = c[i] - 48;
-        int pow = 1;
-        for (int j = 1; j < ((int)strlen(c) - i); j++) {
-            pow = pow * 10;
-        }
-        number += (n * pow);
-    }
-    return number;
-}
-
-void options_update(std::string& options, char option, bool action)
-{
-    if (action == 1) {
-        bool already = false;
-        for (int i = 0; i < (int)options.length(); i++) {
-            if (options[i] == option) {
-                already = true;
-                break;
-            }
-        }
-        if (!already) {
-            // printf("We add option %c \n",option);
-            options.push_back(option);
-        }
-    } else {
-        for (int i = 0; i < (int)options.length(); i++) {
-            if (options[i] == option) {
-                // printf("We erase option %c \n",option);
-                options.erase(i, 1);
-            }
-        }
-    }
 }
 
